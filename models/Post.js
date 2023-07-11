@@ -102,18 +102,19 @@ Post.delete=function(postIdToDelete,currentUserId)
 }
 
 
-Post.reusablePostQuery=function(uniqueOperations,visitorId)
+Post.reusablePostQuery=function(uniqueOperations,visitorId,finalOperations=[])
 {
     return new Promise(async function(resolve,reject){
         
         let aggOperations=uniqueOperations.concat([
             {$lookup:{from:"users",localField:"author",foreignField:"_id",as:"authorDocument"}},{$project:{title:1,body:1,authorId:"$author",createdDate:1,author:{$arrayElemAt:["$authorDocument",0]}}}
-        ])
+        ]).concat(finalOperations)
         let posts=await postsCollection.aggregate(aggOperations).toArray()
 
         //Clean Up author property in each post object
         posts=posts.map(function(post){
             post.isVisitorOwner=post.authorId.equals(visitorId)
+            post.authorId=undefined
             post.author={
                 username:post.author.username,
                 avatar:new User(post.author,true).avatar
@@ -159,5 +160,19 @@ Post.findAuthorId=function(authorId)
     ])
 }
 
+Post.search=function(searchTerm){
+    return new Promise(async (resolve,reject)=>{
+        if(typeof(searchTerm)=="string")
+        {
+            let posts=await Post.reusablePostQuery([
+                {$match:{$text:{$search:searchTerm}}},
+                
+            ],undefined,[{$sort:{score:{$meta:"textScore"}}}])
+            resolve(posts)
+        }else{
+            reject()
+        }
+    })
+}
 
 module.exports=Post;

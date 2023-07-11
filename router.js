@@ -18,6 +18,8 @@ route.get('/post/:id',postController.viewSingle);
 route.get('/post/:id/edit',userController.mustBeLoggedIn,postController.viewEditScreen)
 route.post('/post/:id/edit',userController.mustBeLoggedIn,postController.edit)
 route.post('/post/:id/delete',userController.mustBeLoggedIn,postController.delete)
+route.post('/search',postController.search)
+
 
 //PROFILE RELATED ROUTES
 route.get('/profile/:username' ,userController.ifUserExists,userController.profilePostsScreen)
