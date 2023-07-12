@@ -4,6 +4,8 @@ const route=express.Router();
 
 const userController=require('./controllers/userController');
 const postController=require('./controllers/postController');
+const followController=require('./controllers/followController');
+
 
 //THESE ARE USER RELATED ROUTES
 route.get('/',userController.home)
@@ -22,5 +24,10 @@ route.post('/search',postController.search)
 
 
 //PROFILE RELATED ROUTES
-route.get('/profile/:username' ,userController.ifUserExists,userController.profilePostsScreen)
+route.get('/profile/:username',userController.ifUserExists,userController.sharedProfileData,userController.profilePostsScreen)
+
+//FOLLOW RELATED ROUTES
+route.post('/addFollow/:username',userController.mustBeLoggedIn,followController.addFollow)
+route.post('/removeFollow/:username',userController.mustBeLoggedIn,followController.removeFollow)
+
 module.exports=route;
