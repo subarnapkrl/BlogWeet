@@ -25,6 +25,9 @@ route.post('/search',postController.search)
 
 //PROFILE RELATED ROUTES
 route.get('/profile/:username',userController.ifUserExists,userController.sharedProfileData,userController.profilePostsScreen)
+route.get('/profile/:username/followers',userController.ifUserExists,userController.sharedProfileData,userController.profileFollowersScreen)
+route.get('/profile/:username/following', userController.ifUserExists, userController.sharedProfileData, userController.profileFollowingScreen)
+
 
 //FOLLOW RELATED ROUTES
 route.post('/addFollow/:username',userController.mustBeLoggedIn,followController.addFollow)
