@@ -12,7 +12,8 @@ route.get('/',userController.home)
 route.post('/register',userController.register)
 route.post('/login',userController.login)
 route.post('/logout',userController.logout)
-
+route.post('/doesUsernameExist',userController.doesUsernameExist)
+route.post('/doesEmailExist',userController.doesEmailExist)
 //THESE ARE POST RELATED ROUTES
 route.get('/create-post',userController.mustBeLoggedIn,postController.viewCreateScreen)
 route.post('/create-post',userController.mustBeLoggedIn,postController.create)
