@@ -6,6 +6,16 @@ const markdown=require('marked');
 const sanitizeHTML=require('sanitize-html')
 const app=express();
 
+
+
+//ACCESSING FORM DATA IN EXPRESS
+app.use(express.urlencoded({extended:false}));
+
+//ACCESSING FORM DATA IN EXPRESS
+app.use(express.json());
+
+app.use('/api',require('./router-api'))
+
 let sessionOptions=session({
     secret:"JavaScript is so cool",
     store:MongoStore.create({
@@ -42,11 +52,6 @@ const router=require('./router.js');
 
 app.use(express.static('public'))
 
-//ACCESSING FORM DATA IN EXPRESS
-app.use(express.urlencoded({extended:false}));
-
-//ACCESSING FORM DATA IN EXPRESS
-app.use(express.json());
 
 app.set('views','views');
 app.set('view engine','ejs')

@@ -20,6 +20,18 @@ exports.create=function(req,res)
     })
 }
 
+
+exports.apiCreate=function(req,res)
+{
+    let post=new Post(req.body,req.apiUser._id);
+    post.create().then(function(newId)
+    {
+        res.json("Congrats.")
+    }).catch(function(errors){
+        res.json(errors)
+    })
+}
+
 exports.viewSingle=async function(req,res)
 {
     try{
@@ -100,6 +112,15 @@ exports.delete=function(req,res)
     })
 }
 
+exports.apiDelete=function(req,res)
+{
+    Post.delete(req.params.id,req.apiUser._id).then(function(){
+       req.json("Success")
+    }).catch(function(){
+        res.json("You do not have permission to perform this action!")
+    })
+}
+
 exports.search=function(req,res)
 {
     Post.search(req.body.searchTerm).then((posts)=>{
@@ -108,3 +129,6 @@ exports.search=function(req,res)
         res.json([])
     })
 }
+
+
+
